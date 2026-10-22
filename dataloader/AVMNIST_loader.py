@@ -16,7 +16,7 @@ class AVMNIST_Loader(object):
         return DataLoader(dataset=self.train_dataset,
                           batch_size=self.cfgs.batch_size,
                           shuffle=True,
-                          num_workers=64,
+                          num_workers=2,
                           pin_memory=True)
     
     @property
@@ -24,14 +24,14 @@ class AVMNIST_Loader(object):
         return DataLoader(dataset=self.valid_dataset,
                           batch_size=self.cfgs.batch_size,
                           shuffle=False,
-                          num_workers=64,
+                          num_workers=2,
                           pin_memory=True)
     @property
     def dep_dataloader(self):
         return DataLoader(dataset=self.dep_dataset,
                           batch_size=self.cfgs.batch_size,
                           shuffle=False,
-                          num_workers=64,
+                          num_workers=2,
                           pin_memory=True)
 
 class AVMNIST(Dataset):
