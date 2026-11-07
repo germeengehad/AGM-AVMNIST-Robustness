@@ -52,3 +52,87 @@ python main.py --data_root '' --device cuda:0 --methods Normal --modality Multim
   year={2023}
 }
 ```
+
+---
+
+# Research Extension: Robust Multimodal Learning under Audio Corruption
+
+This repository also contains an experimental extension based on the AGM
+implementation. The project investigates whether training-time Gaussian
+noise augmentation can improve the robustness of multimodal learning
+when the audio modality is corrupted.
+
+## Research Objective
+
+**Research question:** To what extent can Gaussian noise augmentation
+during AGM training improve robustness to audio corruption on AV-MNIST?
+
+The project evaluates three configurations:
+
+1. Normal baseline.
+2. Adaptive Gradient Modulation (AGM) baseline.
+3. AGM with training-time Gaussian noise augmentation applied to audio.
+
+A learnable modality gate was also explored as a secondary experiment.
+
+## Method
+
+Gaussian noise with a standard deviation of 0.10 was added to the
+normalized audio input during training in the augmentation experiment.
+The augmented audio tensor was clamped to the range [0, 1].
+The visual modality was not modified.
+
+During evaluation, Gaussian noise was applied to the audio modality
+at four corruption levels: 0.00, 0.05, 0.10, and 0.20.
+
+## Main Results
+
+Multimodal test accuracy (%):
+
+| Noise sigma | Normal | AGM | AGM + Noise Augmentation |
+|---:|---:|---:|---:|
+| 0.00 | 70.04 | 71.79 | 72.15 |
+| 0.05 | 68.94 | 71.58 | 72.07 |
+| 0.10 | 63.44 | 70.49 | 72.03 |
+| 0.20 | 34.39 | 65.46 | 71.25 |
+
+At the highest evaluated noise level (sigma = 0.20), AGM with
+training-time noise augmentation achieved 71.25% accuracy, compared
+with 65.46% for the AGM baseline.
+
+These results suggest that training-time audio noise augmentation
+can improve robustness to audio corruption in this experimental
+setting.
+
+## Experimental Environment
+
+The experiments were conducted using a different software environment
+from the one specified in the original repository.
+
+See [docs/environment.md](docs/environment.md) for hardware and
+software details.
+
+## Documentation and Results
+
+- [Final comparison and analysis](results/final_comparison.md)
+- [Detailed experiment log](docs/experiment_log.md)
+- [Experimental environment](docs/environment.md)
+- [Noise robustness results](results/)
+
+## Limitations
+
+- Experiments were conducted using a single random seed (999).
+- The Normal robustness evaluation used a separate training run because
+  the original Normal baseline did not save model checkpoints. The
+  separate run was interrupted before completing all configured epochs.
+- Normal and AGM use different model architectures in the original
+  implementation.
+- The learnable modality gate experiment was exploratory and did not
+  improve upon the AGM baseline.
+- Further experiments with multiple random seeds and validation-based
+  checkpoint selection are needed to establish the generality of the
+  findings.
+
+This research extension is an experimental study built upon the
+original AGM implementation. It does not claim to be an exact
+reproduction of every result in the original paper.

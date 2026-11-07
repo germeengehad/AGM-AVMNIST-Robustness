@@ -11,3 +11,11 @@ checkpoint/
 
 # Local backup files
 *.backup
+
+# Local experiment and code backups
+*.save
+*_original.py
+*_before_*.py
+
+# Local experiment configuration
+normal_noise_eval_config.json

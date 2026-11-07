@@ -34,7 +34,13 @@ def train(model,train_dataloader,optimizer,scheduler,epoch,cfgs,device,writer,lo
         audio = audio.float().to(device)
         image = image.float().to(device)
         label = label.long().to(device)
-        
+
+        # Gaussian noise augmentation only for AGM + Noise Augmentation
+        if cfgs.expt_name == 'agm_noise_aug':
+            noise_sigma = 0.10
+            noise = torch.randn_like(audio) * noise_sigma
+            audio = torch.clamp(audio + noise, 0.0, 1.0)
+
         iteration = (epoch-1)*num_batch + step
         optimizer.zero_grad()
         if cfgs.modality == 'Audio':
